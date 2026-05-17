@@ -139,19 +139,15 @@ static bool fetchLightning (void)
     }
 
     // Build GET path  - add lat/lon/radius only when not worldwide
-    client.print ("GET /ham/HamClock/lightning/strikes.pl");
+    char query[128];
+    int n = snprintf (query, sizeof(query), "%s", ltg_strikes);
     if (!ltg_worldwide) {
-        client.print ("?lat=");
-        client.print (de_ll.lat_d, 4);
-        client.print ("&lon=");
-        client.print (de_ll.lng_d, 4);
-        client.print ("&radius=");
-        client.print (ltg_radius_km);
+        snprintf (query+n, sizeof(query)-n, "?lat=%.4f&lon=%.4f&radius=%u",
+                       (double)de_ll.lat_d, (double)de_ll.lng_d, ltg_radius_km);
     }
-    client.print (" HTTP/1.0\r\n");
-    client.print ("Host: ");
-    client.println (backend_host);
-    client.print ("Connection: close\r\n\r\n");
+
+    // query web page using standard helper
+    httpHCGET (client, backend_host, query);
 
     if (!httpSkipHeader (client)) {
         Serial.printf ("LTG: no HTTP header\n");
