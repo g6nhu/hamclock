@@ -34,7 +34,7 @@ static const int ltg_ring_km[] = { 100, 200, 300, 400, 500 };
 #define LTG_N_RINGS  ((int)NARRAY(ltg_ring_km))
 
 // OHB endpoint
-static const char ltg_strikes[] = "/ham/HamClock/lightning/strikes.pl";
+static const char ltg_strikes[] = "/lightning/strikes.pl";
 
 // ---- types ---------------------------------------------------------------
 
